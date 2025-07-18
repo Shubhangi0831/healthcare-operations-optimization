@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefaf6;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      color: #4b007d;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .button {
+      background-color: #d6b3f8;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #4b007d;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      background-color: #c295e3;
+    }
+
+    .active-mode {
+      border: 2px solid #4b007d;
+    }
+
+    .back {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Doctor Dashboard 🩺</h1>
+  {% if status_message %}
+  <div class="mode-status">
+    {{ status_message }}
+  </div>
+{% endif %}
+<div style="display: flex; justify-content: center; margin-bottom: 20px;">
+  <form action="/reset-queue" method="post">
+      <button class="btn start-btn" type="submit">▶️ Start Appointments</button>
+  </form>
+</div>
+
+
+
+  <div class="dashboard">
+    <a href="/current-patient" class="button">👀 View Current</a>
+
+    <form action="/activate/emergency" method="POST">
+      <button class="button {% if status.emergency %}active-mode{% endif %}">🚨 Emergency</button>
+    </form>
+
+    <form action="/activate/rounds" method="POST">
+      <button class="button {% if status.rounds %}active-mode{% endif %}">🌀 Rounds Mode</button>
+    </form>
+
+    <form action="/activate/weekend" method="POST">
+      <button class="button {% if status.weekend %}active-mode{% endif %}">🛏️ Sunday</button>
+    </form>
+
+    <form action="/reset-queue" method="POST">
+      <button class="button">📦 Reset Queue</button>
+    </form>
+
+    <a href="/view-appointments" class="button">📝 View Appointments</a>
+  </div>
+
+  <div class="back">
+    <a href="/" class="button">← Back to Home</a>
+  </div>
+
+  <p style="text-align:center; font-size: 0.95rem; color: #555;">
+    🕓 Last Queue Reset: <strong>{{ last_reset }}</strong>
+</p>
+
+</body>
+</html>

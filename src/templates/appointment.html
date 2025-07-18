@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Sudha Hospital</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            document.body.classList.add("loaded");
+        });
+      </script>
+      <style>
+        body::before {
+            content: "⏳ Loading...";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #f8f3ff;
+            color: #7a4eab;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        body.loaded::before {
+            opacity: 0;
+            pointer-events: none;
+        }
+      </style>
+      
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f6efff;
+            padding: 40px;
+            color: #3b2f4a;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            text-align: center;
+            color: #7a4eab;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #c19ee0;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #a775c8;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #7a4eab;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Book an Appointment</h2>
+        <p class="info-note">
+            📝 Appointments booked today will be scheduled for the <strong>next working day</strong>. Sudha Hospital is closed on Sundays.
+            </p>            
+        <form method="POST">
+            {% if error %}
+            <p class="error-message">{{ error }}</p>
+            {% endif %}
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="number" name="age" placeholder="Your Age" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <label for="reason">Concern / Reason for Visit</label>
+            <textarea id="reason" name="reason" placeholder="Describe your symptoms..." rows="4" required></textarea> 
+            
+            <p><em>⏳ Your time slot will be auto-assigned based on queue position.</em></p>
+
+            <button type="submit">Confirm Appointment</button>
+        </form>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+</body>
+</html>

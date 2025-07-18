@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Track My Token</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+        document.body.classList.add("loaded");
+    });
+  </script>
+  <style>
+    body::before {
+        content: "⏳ Loading...";
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: #f8f3ff;
+        color: #7a4eab;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+    }
+    body.loaded::before {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fefaf6;
+      color: #4b007d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .tracker-container {
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      max-width: 550px;
+      width: 90%;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: #5e2b97;
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #c19ee0;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #a775c8;
+    }
+
+    .status-message {
+      margin-top: 25px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #4b007d;
+      min-height: 24px;
+    }
+
+    .message {
+      font-size: 1.1rem;
+      margin-top: 20px;
+      color: #5a3d85;
+    }
+
+    .status-alert {
+      font-size: 1.1rem;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff8e1;
+      color: #a75b00;
+      border-left: 6px solid #ffc107;
+      border-radius: 6px;
+    }
+
+    .back-link {
+      margin-top: 30px;
+      display: inline-block;
+      text-decoration: none;
+      color: #7a4eab;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .queue-status {
+      margin-top: 25px;
+      padding: 20px;
+      background-color: #f4edfc;
+      border-radius: 12px;
+    }
+
+    .wait-time {
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .quote-box {
+      margin-top: 20px;
+      padding: 16px;
+      background: #ede2ff;
+      border-left: 4px solid #9b59b6;
+      border-radius: 10px;
+      font-style: italic;
+      color: #4b007d;
+      font-size: 1rem;
+    }
+
+    .quote-box::before {
+      content: "💬 ";
+      font-style: normal;
+    }
+
+    .popup-quote {
+  margin-top: 30px;
+  padding: 15px 20px;
+  background-color: #f3eaff;
+  border-radius: 12px;
+  color: #5e2b97;
+  font-style: italic;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: center;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.3s ease-in-out;
+}
+
+
+@keyframes fadeInQuote {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="tracker-container">
+    <h2>🎫 Track Your Token</h2>
+    <form method="POST">
+        {% if status_message %}
+          <p class="status-alert">{{ status_message }}</p>
+        {% endif %}
+        <input type="number" name="token" placeholder="Enter your token number" required>
+        <button type="submit">Check Status</button>
+    </form>
+
+    {% if message %}
+      <p class="message">{{ message }}</p>
+    {% endif %}
+
+    {% if estimated_time %}
+      <p class="message">{{ estimated_time }}</p>
+    {% endif %}
+
+    <hr style="margin: 30px 0;">
+
+    <h3>Live Queue Overview</h3>
+    <div class="queue-status">
+      <p><strong>Currently Serving:</strong>
+        {% if current == 0 %}
+          Waiting to start...
+        {% else %}
+          Token {{ current }}
+        {% endif %}
+      </p>
+
+      {% if estimated_wait_time %}
+        <p class="wait-time">{{ estimated_wait_time }}</p>
+      {% endif %}
+
+      {% if status.emergency %}
+        <p style="color:red;">🚨 Doctor is in a Emergency Case.</p>
+      {% elif status.rounds %}
+        <p>🔄 Doctor is on hospital rounds.</p>
+      {% elif status.weekend %}
+        <p>💤 It's Sunday. The hospital is closed today.</p>
+      {% endif %}
+
+    </div>
+
+    {% if quote %}
+<div class="popup-quote">
+  💬 <em>{{ quote }}</em>
+</div>
+{% endif %}
+
+    <a href="/" class="back-link">← Back to Home</a>
+  </div>
+</body>
+</html>

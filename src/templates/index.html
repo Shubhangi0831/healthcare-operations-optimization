@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <title>Sudha Hospital</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            document.body.classList.add("loaded");
+        });
+    </script>
+    <style>
+        body::before {
+            content: "⏳ Loading...";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #f8f3ff;
+            color: #7a4eab;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        body.loaded::before {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+    <div class="hamburger-menu">
+        <span onclick="toggleMenu()">☰</span>
+    </div>
+    
+    <div id="sidePanel" class="side-panel">
+        <span class="close-btn" onclick="toggleMenu()">&times;</span>
+        
+        <!-- View Confirmation Form -->
+        <div class="sidebar-section">
+            <h3><i class="fas fa-file-alt"></i> View Confirmation</h3>
+            <form action="/view-confirmation" method="post">
+                <input type="text" name="phone" placeholder="Phone Number" required>
+                <button type="submit" class="sidebar-btn">View</button>
+            </form>
+        </div>
+        
+    
+        <!-- Reschedule Form -->
+        <div class="box">
+            <h3>🔁 Reschedule</h3>
+            <form action="/reschedule" method="get">
+                <input type="text" name="token" placeholder="Token No." required>
+                <input type="text" name="phone" placeholder="Phone No." required>
+                <input type="text" name="appt_date" placeholder="Appointment Date (YYYY-MM-DD)" required>
+                <button class="btn">Reschedule</button>
+            </form>
+        </div>
+    </div>
+    
+    </div>    
+    <header class="hero"> 
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Sudha Hospital Logo" class="logo" />
+        <div class="hero-content">
+            <h1>Sudha Hospital</h1>
+            <p>Where comfort meets care.</p>
+            <div class="hero-buttons">
+                <a href="/appointment" class="btn">Book Appointment</a>
+                <a href="/track-token" class="btn">Track My Token</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="about">
+        <h2>Your Health, Our Priority</h2>
+        <p>We're here to make your visit peaceful, predictable, and warm. Whether you're here for a check-up or something more — you're in safe hands.</p>
+    </section>
+
+    <section class="how-it-works">
+        <h2>How it works:</h2>
+        <div class="steps">
+            <div class="step">
+                <span>📅</span>
+                <p>Book your appointment online</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <span>🔢</span>
+                <p>Get your digital queue token</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <span>⏳</span>
+                <p>Track your position in real-time</p>
+            </div>
+            <div class="arrow">→</div>
+            <div class="step">
+                <span>😊</span>
+                <p>Meet your doctor without chaos</p>
+            </div>
+        </div>
+        <a href="/appointment" class="btn">Book Appointment</a>
+    </section>
+
+    <footer>
+        <p><em>Breathe in… breathe out. Your journey to healing starts here. The doctor will be with you shortly 🌿</em></p>
+    </footer>
+    <script>
+        function toggleMenu() {
+            const panel = document.getElementById("sidePanel");
+            panel.classList.toggle("open");
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-color: #fefaf6;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            color: #3b2f4a;
+        }
+        .confirmation-box {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 500px;
+        }
+        .confirmation-box h2 {
+            color: #7a4eab;
+            margin-bottom: 10px;
+        }
+        .confirmation-box p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+        .home-link {
+            margin-top: 25px;
+            display: inline-block;
+            text-decoration: none;
+            color: #7a4eab;
+            font-weight: bold;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-box">
+        {% if duplicate %}
+  <h2>⚠️ You’ve already booked an appointment.</h2>
+  <p>Hello {{ name }}, it looks like you've already submitted a form for {{ appointment_date }}.</p>
+  <p>If you need to make changes, you can <strong>reschedule below</strong>. If rescheduling doesn't work, please contact the hospital directly.</p>
+{% else %}
+  <h2>Appointment Confirmed ✅</h2>
+  <p>Thank you, {{ name }}!!</p>
+  <p>Your token number is <strong>{{ token }}</strong>.</p>
+  <p>Your time slot is <strong>{{ timeslot }}</strong> for {{ appointment_date }}</p>
+  <p>You’ll receive updates as needed.</p>
+{% endif %}
+
+{% if token %}
+  <div style="margin-top: 20px;">
+    <p>Need to reschedule?</p>
+  <form action="/reschedule" method="get">
+      <input type="hidden" name="token" value="{{ token }}">
+      <input type="hidden" name="phone" value="{{ phone }}">
+      <input type="hidden" name="appt_date" value="{{ appointment_date }}">
+      <button type="submit" class="btn">Reschedule Appointment</button>
+    </form>
+  </div>
+{% endif %}
+
+
+        <a href="/" class="home-link">← Back to Home</a>
+    </div>
+</body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+</html>
+

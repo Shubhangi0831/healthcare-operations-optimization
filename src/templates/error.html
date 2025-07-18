@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fff5f5;
+            text-align: center;
+            padding: 60px;
+            color: #aa0000;
+        }
+
+        .error-box {
+            background: #fff;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .error-box h2 {
+            color: #d14;
+            margin-bottom: 20px;
+        }
+
+        .error-box p {
+            font-size: 18px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            background-color: #c19ee0;
+            padding: 10px 20px;
+            border-radius: 6px;
+            color: white;
+        }
+
+        a:hover {
+            background-color: #a775c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+            <h2>⚠️ Error</h2>
+            <p>❌ {{ message }}</p>
+            <a href="/" class="btn">← Back to Home</a>
+        </div>
+    </body>
+    
+</html>

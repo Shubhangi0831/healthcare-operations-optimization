@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Current Patient</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 50px 20px;
+      background-color: #fefaf6;
+      color: #333;
+    }
+
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      margin: auto;
+      max-width: 500px;
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .token {
+      font-size: 2.5rem;
+      color: #5e2b97;
+      margin-bottom: 15px;
+    }
+
+    .message {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .btn {
+      background-color: #d6b3f8;
+      color: #4b007d;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #c199e5;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="token">Now Serving: Token #{{ current }}</div>
+    <div class="message">{{ message }}</div>
+
+    <div class="actions">
+      <form method="POST" action="/next-patient">
+        <button type="submit" class="btn">➡️ Next Patient</button>
+      </form>
+      <a href="/doctor" class="btn">← Back to Dashboard</a>
+    </div>
+  </div>
+</body>
+</html>
